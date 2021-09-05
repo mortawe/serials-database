@@ -1,0 +1,19 @@
+<form id="createShow">
+    <label>Title<input type="text" id="title" value="{{config.title}}"></label>
+    <label>Release<input type="date" id="release" value="{{config.release}}"></label>
+    <label>Description<input type="text" id="description" value="{{config.description}}"></label>
+    <br>
+    <label>Persons
+        <select size="7" multiple id="selector" name="name[]">
+            {{#config.personList}}
+                <option  {{selected}} value="{{person_id}}">{{name}} </option>
+            {{/config.personList}}
+        </select>
+    </label>
+    <br>
+    <input type="submit">
+</form>
+<br>
+<h1>Roles</h1>
+{{#config.person}}   <a href="/person/{{person_id}}/update" data-section="person/update">{{name}}</a>
+{{/config.person}}

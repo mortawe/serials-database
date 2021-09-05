@@ -1,0 +1,21 @@
+<table>
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Birthdate</th>
+        <th>Roles</th>
+
+        <th>Bio</th>
+    </tr>
+    </thead>
+    <tbody>
+    {{#data}}
+        <tr class="table__row">
+            <td><a href="/person/{{person_id}}/update" data-section="person/update" class="personRef">{{name}}</a></td>
+            <td>{{ birthdate }}</td>
+            <td>{{#roles}} <a href="/show/{{id}}">{{title}}</a>,{{/roles}}</td>
+            <td>{{bio}}</td>
+        </tr>
+    {{/data}}
+    </tbody>
+</table>

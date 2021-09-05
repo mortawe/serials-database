@@ -1,0 +1,22 @@
+<form id="createShow">
+    <label>Title<input type="text" id="title" value=""></label>
+    <label>Release<input type="date" id="release" value=""></label>
+    <label>Description<input type="text" id="description" value=""></label>
+    <br>
+    <label>Persons
+        <select size="7" multiple id="selectPersons" name="name[]">
+            {{#config.person}}
+                <option value="{{person_id}}">{{name}} </option>
+            {{/config.person}}
+        </select>
+    </label>
+    <label>Genres
+        <select size="7"  id="selectGenres">
+            {{#config.genreList}}
+                <option value="{{genre_id}}">{{name}} </option>
+            {{/config.genreList}}
+        </select>
+    </label>
+    <br>
+    <input type="submit">
+</form>
