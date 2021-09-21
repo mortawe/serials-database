@@ -121,7 +121,6 @@ type GetShowArg struct {
 type GetShowReply struct {
 	models.ExtShow
 	PersonList []models.Person `json:"personList"`
-	GenreList  []models.Genre  `json:"genreList"`
 }
 
 func (h *ShowHandler) Get(c *gin.Context) {

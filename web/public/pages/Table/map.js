@@ -28,16 +28,4 @@ export const TABLE_MAP = {
         },
         tmplName: 'Persons.mustache'
     },
-    genre: {
-        name: "genre",
-        header: "Genres",
-        request: {
-            url: '/genre/getAll',
-            callback: function (_, response) {
-                const genres = JSON.parse(response);
-                tablePage(TABLE_MAP.genre, genres);
-            }
-        },
-        tmplName: 'Genres.mustache'
-    }
 }

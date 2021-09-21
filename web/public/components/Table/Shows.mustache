@@ -4,6 +4,8 @@
         <th>Title</th>
         <th>Release Date</th>
         <th>Description</th>
+        <th>Episodes Number</th>
+        <th>Genre</th>
     </tr>
     </thead>
     <tbody>
@@ -12,6 +14,8 @@
             <td><a href="/show/{{show_id}}/update" data-section="show/update">{{title}}</a></td>
             <td>{{ release }}</td>
             <td>{{ description }}</td>
+            <td>{{episode_num}}</td>
+            <td>{{genre}}</td>
         </tr>
     {{/data}}
     </tbody>

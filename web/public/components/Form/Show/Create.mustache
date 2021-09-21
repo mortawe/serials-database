@@ -2,19 +2,14 @@
     <label>Title<input type="text" id="title" value=""></label>
     <label>Release<input type="date" id="release" value=""></label>
     <label>Description<input type="text" id="description" value=""></label>
+    <label>Episodes Number<input type="number" id="episode_num" value="{{config.episode_num}}"></label>
+    <label>Genre<input type="text" id="genre" value="{{config.genre}}"></label>
     <br>
     <label>Persons
-        <select size="7" multiple id="selectPersons" name="name[]">
-            {{#config.person}}
-                <option value="{{person_id}}">{{name}} </option>
-            {{/config.person}}
-        </select>
-    </label>
-    <label>Genres
-        <select size="7"  id="selectGenres">
-            {{#config.genreList}}
-                <option value="{{genre_id}}">{{name}} </option>
-            {{/config.genreList}}
+        <select size="7" multiple id="selector" name="name[]">
+            {{#config.personList}}
+                <option  {{selected}} value="{{person_id}}">{{name}} </option>
+            {{/config.personList}}
         </select>
     </label>
     <br>

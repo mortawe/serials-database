@@ -17,8 +17,8 @@ func NewPersonRepo(db *sqlx.DB) *PersonRepo {
 	return &PersonRepo{db: db}
 }
 
-const insertPersonQuery = `INSERT INTO person (name, birthdate, bio) VALUES (
-	:name, :birthdate, :bio) RETURNING *`
+const insertPersonQuery = `INSERT INTO person (name, birthdate, bio, awards) VALUES (
+	:name, :birthdate, :bio, :awards) RETURNING *`
 
 func (r *PersonRepo) Create(ctx context.Context, s *models.Person) (*models.Person, error) {
 	show := models.Person{}
@@ -30,7 +30,7 @@ func (r *PersonRepo) Create(ctx context.Context, s *models.Person) (*models.Pers
 	return &show, err
 }
 
-const updatePersonQuery = `UPDATE person SET name=:name, birthdate=:birthdate WHERE person_id = :person_id`
+const updatePersonQuery = `UPDATE person SET name=:name, birthdate=:birthdate, bio=:bio, awards=:awards WHERE person_id = :person_id`
 
 func (r *PersonRepo) Update(ctx context.Context, s *models.Person) (*models.Person, error) {
 	show := models.Person{}

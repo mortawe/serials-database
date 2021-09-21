@@ -36,14 +36,11 @@ func register(db *sqlx.DB) *gin.Engine {
 	router := gin.Default()
 	sR := repository.NewShowRepo(db)
 	pR := repository.NewPersonRepo(db)
-	gR := repository.NewGenreRepo(db)
 
 	pH := api.NewPersonHandler(pR, sR)
 	sH := api.NewShowHandler(sR, pR)
-	gH := api.NewGenreHandler(gR, sR)
 
 	sH.Register(router.Group("show"))
 	pH.Register(router.Group("person"))
-	gH.Register(router.Group("genre"))
 	return router
 }

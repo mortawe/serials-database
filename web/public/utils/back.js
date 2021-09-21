@@ -1,11 +1,3 @@
-export function createBack() {
-    const back = document.createElement('a');
-    back.href = '/';
-    back.textContent = 'Menu';
-    back.dataset.section = 'menu';
-
-    return back;
-}
 
 export function createRef(name, path, section) {
     const ref = document.createElement('a');

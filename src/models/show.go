@@ -8,7 +8,7 @@ type Show struct {
 	Release     time.Time `json:"release" db:"release"`
 	Description string    `json:"description" db:"description"`
 	EpisodeNum  int       `json:"episode_num" db:"episode_num"`
-	GenreID     int       `json:"genre_id" db:"genre_id"`
+	Genre       string    `json:"genre" db:"genre"`
 }
 
 type ExtShow struct {

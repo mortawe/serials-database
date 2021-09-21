@@ -1,10 +1,13 @@
 import {application} from "../../main.js";
-import {createBack} from "../../utils/back.js";
 import {FormComponent} from "../../components/Form/Form.js";
 import {TABLE_MAP} from "../Table/map.js";
 import {tablePage} from "../Table/Table.js";
+import {menuPage} from "../Menu/Menu.js";
 
 export function updateShowPage(href, data) {
+    application.innerText = '';
+    menuPage();
+
     const id = parseInt(/show\/(\d+)\//.exec(href)[1]);
     if (!id) {
         console.error("no id");
@@ -43,7 +46,6 @@ export function updateShowPage(href, data) {
             }
         })
     }
-    application.innerHTML = '';
     const section = document.createElement('section');
     section.dataset.sectionName = "updateShow";
 
@@ -51,8 +53,6 @@ export function updateShowPage(href, data) {
     header.textContent = "Update Show";
     section.appendChild(header);
 
-    const back = createBack();
-    section.appendChild(back);
 
     if (data) {
         const selectedIDs = data.person.map(elem => elem.person_id)
@@ -84,6 +84,8 @@ export function updateShowPage(href, data) {
         const title = document.getElementById('title').value;
         const release = document.getElementById('release').value;
         const description = document.getElementById('description').value;
+        const episode_num = parseInt(document.getElementById('episode_num').value);
+        const genre = document.getElementById('genre').value;
 
         function getSelectValues(select) {
             const result = [];
@@ -107,7 +109,15 @@ export function updateShowPage(href, data) {
 
         HttpModule.post({
             url: '/show/update',
-            body: {show_id: id, title: title, release: new Date(release), description: description, person: persons},
+            body: {
+                show_id: id,
+                title: title,
+                release: new Date(release),
+                description: description,
+                person: persons,
+                genre: genre,
+                episode_num: episode_num
+            },
             callback: (status, response) => {
                 switch (status) {
                     case 200: {

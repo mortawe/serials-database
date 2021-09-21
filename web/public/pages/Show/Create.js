@@ -1,11 +1,13 @@
 import {application} from "../../main.js";
-import {createBack} from "../../utils/back.js";
 import {FormComponent} from "../../components/Form/Form.js";
 import {TABLE_MAP} from "../Table/map.js";
 import {tablePage} from "../Table/Table.js";
+import {menuPage} from "../Menu/Menu.js";
 
 export function createShowPage() {
-    application.innerHTML = '';
+    application.innerText = '';
+    menuPage();
+
     const section = document.createElement('section');
     section.dataset.sectionName = "show/create";
 
@@ -13,8 +15,6 @@ export function createShowPage() {
     header.textContent = "Create Show";
     section.appendChild(header);
 
-    const back = createBack();
-    section.appendChild(back);
 
     const formNode = document.createElement('form');
     const data = {};
@@ -23,20 +23,7 @@ export function createShowPage() {
         callback: (status, response) => {
             switch (status) {
                 case 200:
-                    data.person = JSON.parse(response);
-                    break;
-                default:
-                    const error = JSON.parse(response);
-                    alert(error);
-            }
-        }
-    })
-    HttpModule.post({
-        url: "/genre/getAll",
-        callback: (status, response) => {
-            switch (status) {
-                case 200:
-                    data.genreList = JSON.parse(response);
+                    data.personList = JSON.parse(response);
                     break;
                 default:
                     const error = JSON.parse(response);
@@ -59,6 +46,8 @@ export function createShowPage() {
         const title = document.getElementById('title').value;
         const release = document.getElementById('release').value;
         const description = document.getElementById('description').value;
+        const episode_num = parseInt(document.getElementById('episode_num').value);
+        const genre = document.getElementById('genre').value;
 
         function getSelectValues(select) {
             const result = [];
@@ -76,12 +65,19 @@ export function createShowPage() {
             return result;
         }
 
-        const persons = getSelectValues(document.getElementById('selectPersons')).map(function (elem) {
+        const persons = getSelectValues(document.getElementById('selector')).map(function (elem) {
             return {'person_id': parseInt(elem)}
         });
         HttpModule.post({
             url: '/show/create',
-            body: {title: title, release: new Date(release), description: description, persons: persons},
+            body: {
+                title: title,
+                release: new Date(release),
+                description: description,
+                person: persons,
+                genre: genre,
+                episode_num: episode_num
+            },
             callback: (status, response) => {
                 switch (status) {
                     case 200: {

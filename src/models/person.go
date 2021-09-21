@@ -7,10 +7,10 @@ type Person struct {
 	Name      string    `json:"name" db:"name"`
 	Birthdate time.Time `json:"birthdate" db:"birthdate"`
 	Bio       string    `json:"bio" db:"bio"`
+	Awards    string    `json:"awards" db:"awards"`
 }
 
 type ExtPerson struct {
 	Person
 	Shows  []Show  `json:"show" db:"shows"`
-	Genres []Genre `json:"genre" db:"genre"`
 }

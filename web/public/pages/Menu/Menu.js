@@ -3,11 +3,6 @@ import {tablePage} from "../Table/Table.js";
 import {TABLE_MAP} from "../Table/map.js";
 
 const menu = {
-    menu: {
-        href: '/',
-        text: 'Menu',
-        open: menuPage,
-    },
     persons: {
         href: '/persons',
         text: 'Persons',
@@ -18,11 +13,12 @@ const menu = {
         text: "Shows",
         open: () => tablePage(TABLE_MAP.show),
     },
-    genres: {
-        href: '/genres',
-        text: "Genres",
-        open: () => tablePage(TABLE_MAP.genre),
-    },
+    search: {
+        href: '/search',
+        test: "Search",
+        open: () => {
+        }
+    }
 }
 
 export function menuPage() {

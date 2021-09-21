@@ -1,5 +1,6 @@
 import {config} from "./pages/config.js";
 import {menuPage} from "./pages/Menu/Menu.js";
+
 export const application = document.getElementById('app');
 
 application.addEventListener('click', e => {
@@ -7,6 +8,8 @@ application.addEventListener('click', e => {
 
     if (target instanceof HTMLAnchorElement) {
         e.preventDefault();
+        application.innerText = '';
+        menuPage();
         config[target.dataset.section].open(target.href);
     }
 });

@@ -17,8 +17,8 @@ func NewShowRepo(db *sqlx.DB) *ShowRepo {
 	return &ShowRepo{db: db}
 }
 
-const insertShowQuery = `INSERT INTO show (title, release, description, genre_id) VALUES (
-	:title, :release, :description, :genre_id) RETURNING *`
+const insertShowQuery = `INSERT INTO show (title, release, description, episode_num, genre) VALUES (
+	:title, :release, :description, :episode_num, :genre) RETURNING *`
 
 func (r *ShowRepo) Create(ctx context.Context, s *models.Show) (*models.Show, error) {
 	show := models.Show{}
@@ -30,7 +30,7 @@ func (r *ShowRepo) Create(ctx context.Context, s *models.Show) (*models.Show, er
 	return &show, err
 }
 
-const updateShowQuery = `UPDATE show SET title=:title, release=:release, description=:description, genre_id=:genre_id WHERE show_id = :show_id
+const updateShowQuery = `UPDATE show SET title=:title, release=:release, description=:description, genre=:genre WHERE show_id = :show_id
 RETURNING *`
 
 func (r *ShowRepo) Update(ctx context.Context, s *models.Show) (*models.Show, error) {
@@ -44,10 +44,9 @@ func (r *ShowRepo) Update(ctx context.Context, s *models.Show) (*models.Show, er
 }
 
 const (
-	findShowQueryBase = `SELECT show_id, title, release, description, episode_num, genre_id FROM show `
+	findShowQueryBase = `SELECT show_id, title, release, description, episode_num, genre FROM show `
 )
 
-// todo maxpage
 func (r *ShowRepo) Find(ctx context.Context, name string, sort search.Sort) ([]models.Show, error) {
 	dest := &[]models.Show{}
 	arguments := map[string]interface{}{}
@@ -112,14 +111,3 @@ func (r *ShowRepo) DeletePersonsFromShow(ctx context.Context, id int) error {
 	return err
 }
 
-const getByGenreQ = `SELECT show.* FROM show  WHERE genre_id = :id`
-
-func (r *ShowRepo) GetByGenre(ctx context.Context, genreID int) ([]models.Show, error) {
-	dest := []models.Show{}
-	query, args, err := r.db.BindNamed(deletePersonQ, map[string]interface{}{"id": genreID})
-	if err != nil {
-		return nil, err
-	}
-	err = r.db.SelectContext(ctx, &dest, query, args...)
-	return dest, err
-}

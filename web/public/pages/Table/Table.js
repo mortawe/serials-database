@@ -1,17 +1,22 @@
-import {createBack, createRef} from "../../utils/back.js";
+import {createRef} from "../../utils/back.js";
 import {TableComponent} from "../../components/Table/Table.js";
 import {application} from "../../main.js";
+import {menuPage} from "../Menu/Menu.js";
 
 export function tablePage(type, data) {
-    application.innerHTML = '';
+    application.innerText = '';
+    menuPage();
+
     const section = document.createElement('section');
     section.dataset.sectionName = type.name;
 
     const header = document.createElement('h1');
     header.textContent = type.header;
     section.appendChild(header);
-    const back = createBack();
-    section.appendChild(back);
+    const ref = createRef(`Create ${type.header}`, `${type.name}/create`, `${type.name}/create`)
+    section.appendChild(ref);
+    const refSearch = createRef(`Search ${type.header}`, `${type.name}/find`, `${type.name}/find`)
+    section.appendChild(refSearch);
 
     const tableNode = document.createElement('table');
 
@@ -30,10 +35,5 @@ export function tablePage(type, data) {
 
         HttpModule.post(type.request);
     }
-
-    const ref = createRef('Create', `${type.name}/create`, `${type.name}/create`)
-
-
-    section.appendChild(ref);
     application.appendChild(section);
 }

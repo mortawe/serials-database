@@ -5,8 +5,7 @@ import {createPersonPage} from "./Person/Create.js";
 import {updatePersonPage} from "./Person/Update.js";
 import {createShowPage} from "./Show/Create.js";
 import {updateShowPage} from "./Show/Update.js";
-import {listGenrePage} from "./Genre/List.js";
-import {createGenrePage} from "./Genre/Create.js";
+import {findPersonPage} from "./Person/Find.js";
 
 export const config = {
     'menu': {
@@ -23,11 +22,6 @@ export const config = {
         href: '/show',
         text: "Shows",
         open: () => tablePage(TABLE_MAP.show),
-    },
-    genres: {
-        href: '/genre',
-        text: "Genres",
-        open: () => tablePage(TABLE_MAP.genre),
     },
     'person/create': {
         href: '/person/create',
@@ -47,11 +41,7 @@ export const config = {
     'show/update': {
         open: (href) => updateShowPage(href),
     },
-    'genre/list': {
-        open: (href) => listGenrePage(href)
-    },
-
-    'genre/create': {
-        open: createGenrePage
+    'person/find': {
+        open: findPersonPage
     }
 }
