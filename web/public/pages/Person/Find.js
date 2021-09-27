@@ -32,8 +32,8 @@ export function findPersonPage() {
         const before = document.getElementById('before').value;
         const awards = document.getElementById('awards').value;
         HttpModule.post({
-            url: '/person/search',
-            body: {name: name, after: new Date(after), before: new Date(before), awards: awards},
+            url: '/person/find',
+            body: {query: {name: name, after: new Date(after), before: new Date(before), awards: awards}},
             callback: (status, response) => {
                 switch (status) {
                     case 200: {

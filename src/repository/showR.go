@@ -47,10 +47,12 @@ const (
 	findShowQueryBase = `SELECT show_id, title, release, description, episode_num, genre FROM show `
 )
 
-func (r *ShowRepo) Find(ctx context.Context, name string, sort search.Sort) ([]models.Show, error) {
+func (r *ShowRepo) Find(ctx context.Context, show search.Show, sort search.Sort) ([]models.Show, error) {
 	dest := &[]models.Show{}
-	arguments := map[string]interface{}{}
-	query, args, err := r.db.BindNamed(findShowQueryBase+sort.ToSQL(), arguments)
+	show.Title = "%" + show.Title + "%"
+	show.Genre = "%" + show.Genre + "%"
+
+	query, args, err := r.db.BindNamed(findShowQueryBase+show.ToSQL()+sort.ToSQL(), show)
 	if err != nil {
 		return nil, err
 	}
@@ -100,10 +102,10 @@ func (r *ShowRepo) Get(ctx context.Context, id int) (*models.Show, error) {
 	return &show, err
 }
 
-const deletePersonQ = `DELETE  FROM person_show WHERE show_id = :id`
+const deletePersonFromShowQ = `DELETE  FROM person_show WHERE show_id = :id`
 
 func (r *ShowRepo) DeletePersonsFromShow(ctx context.Context, id int) error {
-	query, args, err := r.db.BindNamed(deletePersonQ, map[string]interface{}{"id": id})
+	query, args, err := r.db.BindNamed(deletePersonFromShowQ, map[string]interface{}{"id": id})
 	if err != nil {
 		return err
 	}
@@ -111,3 +113,13 @@ func (r *ShowRepo) DeletePersonsFromShow(ctx context.Context, id int) error {
 	return err
 }
 
+const deleteShowQ = `DELETE FROM show WHERE show_id = :id`
+
+func (r *ShowRepo) Delete(ctx context.Context, id int) error {
+	query, args, err := r.db.BindNamed(deleteShowQ, map[string]interface{}{"id": id})
+	if err != nil {
+		return err
+	}
+	_, err = r.db.ExecContext(ctx, query, args...)
+	return err
+}

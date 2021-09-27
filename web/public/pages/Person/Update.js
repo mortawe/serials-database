@@ -3,6 +3,7 @@ import {FormComponent} from "../../components/Form/Form.js";
 import {TABLE_MAP} from "../Table/map.js";
 import {tablePage} from "../Table/Table.js";
 import {menuPage} from "../Menu/Menu.js";
+import {createRef} from "../../utils/back.js";
 
 export function updatePersonPage(href, data) {
     application.innerText = '';
@@ -33,12 +34,31 @@ export function updatePersonPage(href, data) {
         })
     }
     const section = document.createElement('section');
-    section.dataset.sectionName = "createPerson";
+    section.dataset.sectionName = "person/update";
 
     const header = document.createElement('h1');
     header.textContent = "Update Person";
     section.appendChild(header);
-
+    const deleteRef = createRef("Delete", "person", "person/delete");
+    deleteRef.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        HttpModule.post({
+            url: '/person/delete',
+            body: {id: id},
+            callback: (status, response) => {
+                switch (status) {
+                    case 200: {
+                        tablePage(TABLE_MAP.person);
+                        break;
+                    }
+                    default:
+                        const error = JSON.parse(response);
+                        alert(error);
+                }
+            }
+        })
+    })
+    section.appendChild(deleteRef);
 
     const formNode = document.createElement('form');
     const table = new FormComponent({
@@ -74,5 +94,6 @@ export function updatePersonPage(href, data) {
             }
         })
     });
+
     application.appendChild(section);
 }

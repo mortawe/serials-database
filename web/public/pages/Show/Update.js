@@ -3,6 +3,7 @@ import {FormComponent} from "../../components/Form/Form.js";
 import {TABLE_MAP} from "../Table/map.js";
 import {tablePage} from "../Table/Table.js";
 import {menuPage} from "../Menu/Menu.js";
+import {createRef} from "../../utils/back.js";
 
 export function updateShowPage(href, data) {
     application.innerText = '';
@@ -52,6 +53,27 @@ export function updateShowPage(href, data) {
     const header = document.createElement('h1');
     header.textContent = "Update Show";
     section.appendChild(header);
+
+    const deleteRef = createRef("Delete", "show", "show/delete");
+    deleteRef.addEventListener('click', (evt) => {
+        evt.preventDefault();
+        HttpModule.post({
+            url: '/show/delete',
+            body: {id: id},
+            callback: (status, response) => {
+                switch (status) {
+                    case 200: {
+                        tablePage(TABLE_MAP.person);
+                        break;
+                    }
+                    default:
+                        const error = JSON.parse(response);
+                        alert(error);
+                }
+            }
+        })
+    })
+    section.appendChild(deleteRef);
 
 
     if (data) {

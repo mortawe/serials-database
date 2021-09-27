@@ -46,11 +46,10 @@ const (
 	findPersonQueryBase = `SELECT * FROM person `
 )
 
-func (r *PersonRepo) Find(ctx context.Context, name string, sort search.Sort) ([]models.Person, error) {
+func (r *PersonRepo) Find(ctx context.Context, person search.Person, sort search.Sort) ([]models.Person, error) {
 	dest := &[]models.Person{}
-	query, args, err := r.db.BindNamed(findPersonQueryBase+sort.ToSQL(), map[string]interface{}{
-		"name": name,
-	})
+	person.Name = "%" + person.Name + "%"
+	query, args, err := r.db.BindNamed(findPersonQueryBase+person.ToSQL()+sort.ToSQL(), person)
 	if err != nil {
 		return nil, err
 	}
@@ -82,4 +81,15 @@ func (r *PersonRepo) GetByShowID(ctx context.Context, id int) ([]models.Person, 
 	}
 	err = r.db.SelectContext(ctx, dest, query, args...)
 	return *dest, err
+}
+
+const deletePersonQ = `DELETE FROM person WHERE person_id = :id`
+
+func (r *PersonRepo) Delete(ctx context.Context, id int) error {
+	query, args, err := r.db.BindNamed(deletePersonQ, map[string]interface{}{"id": id})
+	if err != nil {
+		return err
+	}
+	_, err = r.db.ExecContext(ctx, query, args...)
+	return err
 }

@@ -6,6 +6,7 @@ import {updatePersonPage} from "./Person/Update.js";
 import {createShowPage} from "./Show/Create.js";
 import {updateShowPage} from "./Show/Update.js";
 import {findPersonPage} from "./Person/Find.js";
+import {findShowPage} from "./Show/Find.js";
 
 export const config = {
     'menu': {
@@ -43,5 +44,9 @@ export const config = {
     },
     'person/find': {
         open: findPersonPage
+    },
+    'show/find': {
+        open: findShowPage
     }
+
 }

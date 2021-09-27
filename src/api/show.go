@@ -29,6 +29,7 @@ func (h *ShowHandler) Register(r *gin.RouterGroup) {
 	r.POST("/update", h.Update)
 	r.POST("/find", h.Find)
 	r.POST("/get", h.Get)
+	r.POST("/delete", h.Delete)
 }
 
 // todo add actors and others
@@ -105,7 +106,7 @@ func (h *ShowHandler) Find(c *gin.Context) {
 		return
 	}
 	args.Validate()
-	shows, err := h.Shows.Find(c, "", args.Sort)
+	shows, err := h.Shows.Find(c, args.Query, args.Sort)
 	if err != nil {
 		logrus.Error("error on finding", err)
 		apierr.ResponseMsg(c, http.StatusInternalServerError, err.Error())
@@ -146,4 +147,24 @@ func (h *ShowHandler) Get(c *gin.Context) {
 	}
 	extShow.Persons = persons
 	c.JSON(http.StatusOK, extShow)
+}
+
+type DeleteShowArgs struct {
+	ID int `json:"id"`
+}
+
+func (h *ShowHandler) Delete(c *gin.Context) {
+	args := &GetShowArg{}
+	if err := c.BindJSON(args); err != nil {
+		logrus.Warn("error on binding json", err)
+		apierr.Response(c, http.StatusBadRequest, apierr.ErrParseFailed)
+		return
+	}
+	err := h.Shows.Delete(c, args.ID)
+	if err != nil {
+		logrus.Error("error on deleting", err)
+		apierr.ResponseMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.Status(http.StatusOK)
 }

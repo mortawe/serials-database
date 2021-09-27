@@ -9,7 +9,7 @@ export function findShowPage() {
     menuPage();
 
     const section = document.createElement('section');
-    section.dataset.sectionName = "person/find";
+    section.dataset.sectionName = "show/find";
 
     const header = document.createElement('h1');
     header.textContent = "Find Show";
@@ -27,19 +27,19 @@ export function findShowPage() {
     formNode.addEventListener('submit', (evt) => {
         evt.preventDefault();
 
-        const name = document.getElementById('title').value;
+        const title = document.getElementById('title').value;
         const after = document.getElementById('after').value;
         const before = document.getElementById('before').value;
-        const episode_num = document.getElementById('episode_num').value;
+        const episode_num = parseInt(document.getElementById('episode_num').value);
         const genre = document.getElementById('genre').value;
 
         HttpModule.post({
-            url: '/show/search',
-            body: {name: name, after: new Date(after), before: new Date(before), episode_num: episode_num},
+            url: '/show/find',
+            body: {query:{ title: title, release: {after: new Date(after), before: new Date(before)}, genre: genre, episode_num: episode_num}},
             callback: (status, response) => {
                 switch (status) {
                     case 200: {
-                        tablePage(TABLE_MAP.person, JSON.parse(response));
+                        tablePage(TABLE_MAP.show, JSON.parse(response));
                         break;
                     }
                     default:

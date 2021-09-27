@@ -30,6 +30,7 @@ func (h *PersonHandler) Register(r *gin.RouterGroup) {
 	r.POST("/find", h.Find)
 	r.POST("/get", h.Get)
 	r.POST("/getAll", h.GetAll)
+	r.POST("/delete", h.Delete)
 }
 
 // todo add actors and others
@@ -82,7 +83,7 @@ func (h *PersonHandler) Find(c *gin.Context) {
 		return
 	}
 	args.Validate()
-	persons, err := h.Persons.Find(c, "", args.Sort)
+	persons, err := h.Persons.Find(c, args.Query, args.Sort)
 	if err != nil {
 		logrus.Error("error on finding", err)
 		apierr.ResponseMsg(c, http.StatusInternalServerError, err.Error())
@@ -121,11 +122,31 @@ func (h *PersonHandler) Get(c *gin.Context) {
 }
 
 func (h *PersonHandler) GetAll(c *gin.Context) {
-	persons, err := h.Persons.Find(c, "", search.Sort{})
+	persons, err := h.Persons.Find(c, search.Person{}, search.Sort{})
 	if err != nil {
 		logrus.Error("error on getting", err)
 		apierr.ResponseMsg(c, http.StatusInternalServerError, err.Error())
 		return
 	}
 	c.JSON(http.StatusOK, persons)
+}
+
+type DeletePersonArgs struct {
+	ID int `json:"id"`
+}
+
+func (h *PersonHandler) Delete(c *gin.Context) {
+	args := &GetShowArg{}
+	if err := c.BindJSON(args); err != nil {
+		logrus.Warn("error on binding json", err)
+		apierr.Response(c, http.StatusBadRequest, apierr.ErrParseFailed)
+		return
+	}
+	err := h.Persons.Delete(c, args.ID)
+	if err != nil {
+		logrus.Error("error on deleting", err)
+		apierr.ResponseMsg(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.Status(http.StatusOK)
 }

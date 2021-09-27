@@ -1,32 +1,42 @@
+-- INIT TABLES --
 CREATE TABLE person
 (
     person_id SERIAL PRIMARY KEY,
-    name      VARCHAR,
-    birthdate DATE NOT NULL,
-    bio       TEXT,
-    awards    VARCHAR
+    name      VARCHAR(256) NOT NULL,
+    birthdate DATE         NOT NULL,
+    bio       TEXT         DEFAULT '',
+    awards    VARCHAR(256) DEFAULT ''
 );
 
 CREATE TABLE show
 (
     show_id     SERIAL PRIMARY KEY,
-    title       VARCHAR,
-    release     DATE NOT NULL,
-    description TEXT NOT NULL,
-    episode_num INT DEFAULT 0,
-    genre VARCHAR
+    title       VARCHAR(256)           NOT NULL,
+    release     DATE                   NOT NULL,
+    description TEXT         DEFAULT '',
+    episode_num INT          DEFAULT 0 NOT NULL,
+    genre       VARCHAR(256) DEFAULT ''
 );
 
 CREATE TABLE person_show
 (
-    person_id INT
-        CONSTRAINT person_id
-            REFERENCES person,
-    show_id   INT
-        CONSTRAINT show_id
-            REFERENCES show,
+    person_id INT,
+    FOREIGN KEY (person_id) REFERENCES person (person_id) ON DELETE CASCADE,
+    show_id   INT,
+    FOREIGN KEY (show_id) REFERENCES show (show_id) ON DELETE CASCADE,
     CONSTRAINT person_show_uq UNIQUE (person_id, show_id)
 );
+
+-- CREATE INDEX --
+
+CREATE INDEX person_name_index ON person(person_id) INCLUDE (name);
+CREATE INDEX person_name_index ON person(name);
+CREATE INDEX show_title_index ON show(title);
+CREATE INDEX person_birth_index ON person(birthdate);
+CREATE INDEX show_release_index ON show(release);
+
+-- INSERT TEST DATA --
+
 INSERT INTO show (title, release, description, episode_num, genre)
 VALUES ('Psycho-Pass', '2012-10-11',
         'Psycho-Pass is set in a futuristic Japan governed by the Sibyl System (シビュラシステム, Shibyura Shisutemu), a powerful bio-mechanical computer network which endlessly measures the biometrics of Japanese citizens'' brains and mentalities using a "cymatic scan." The resulting assessment is called a Psycho-Pass (サイコパス, Saikopasu), which includes a numeric Crime Coefficient (犯罪係数, Hanzaikeisū) index, revealing the citizen''s criminality potential, and a color-coded Hue, alerting law enforcement to other data, as well as the improvement (clearing) or decline (clouding) of said Psycho-Pass. When a targeted individual''s Crime Coefficient index exceeds the accepted threshold (100), they are pursued, apprehended, and either arrested or decomposed by the field officers of the Crime Investigation Department of the Ministry of Welfare''s Public Safety Bureau. Elite officers known as Inspectors research and evaluate crime scenes, including all personnel involved, with the assistance of Enforcers. Enforcers are latent criminals charged with protecting the Inspectors, adding their expertise and carrying out Inspectors'' instructions. Both are equipped with personally activated, hand-held weapons called "Dominators" whose integrated scanners provide the target''s immediate Psycho-Pass. The gun-like weapon can only fire when approved by the Sibyl System and triggered by its owner. Inspectors and Enforcers work as a team, though Inspectors have jurisdiction to fire their Dominators on the Enforcers should they pose a danger to the public or the Inspectors themselves.',
@@ -62,6 +72,35 @@ VALUES ('Kana Hanazawa', '1989-02-25',
         'Seiyu Award - Best Actor in a Supporting Role');
 
 
-INSERT INTO person_show (person_id, show_id) VALUES (
-                                                        (SELECT person_id FROM person WHERE name = 'Kana Hanazawa'), (SELECT show_id FROM show WHERE title = 'Psycho-Pass')
-                                                    )
+
+INSERT INTO person_show (person_id, show_id)
+VALUES ((SELECT person_id FROM person WHERE name = 'Kana Hanazawa'),
+        (SELECT show_id FROM show WHERE title = 'Psycho-Pass')),
+       ((SELECT person_id FROM person WHERE name = 'Kana Hanazawa'),
+        (SELECT show_id FROM show WHERE title = 'Sinners of the System')),
+       ((SELECT person_id FROM person WHERE name = 'Kana Hanazawa'),
+        (SELECT show_id FROM show WHERE title = 'First Inspector')),
+       ((SELECT person_id FROM person WHERE name = 'Kenji Nojima'),
+        (SELECT show_id FROM show WHERE title = 'Psycho-Pass')),
+       ((SELECT person_id FROM person WHERE name = 'Kenji Nojima'),
+        (SELECT show_id FROM show WHERE title = 'Sinners of the System')),
+       ((SELECT person_id FROM person WHERE name = 'Kenji Nojima'),
+        (SELECT show_id FROM show WHERE title = 'First Inspector')),
+       ((SELECT person_id FROM person WHERE name = 'Tomokazu Seki'),
+        (SELECT show_id FROM show WHERE title = 'Psycho-Pass')),
+       ((SELECT person_id FROM person WHERE name = 'Tomokazu Seki'),
+        (SELECT show_id FROM show WHERE title = 'Sinners of the System')),
+       ((SELECT person_id FROM person WHERE name = 'Tomokazu Seki'),
+        (SELECT show_id FROM show WHERE title = 'First Inspector')),
+       ((SELECT person_id FROM person WHERE name = 'Miyuki Sawashiro'),
+        (SELECT show_id FROM show WHERE title = 'Psycho-Pass')),
+       ((SELECT person_id FROM person WHERE name = 'Miyuki Sawashiro'),
+        (SELECT show_id FROM show WHERE title = 'Sinners of the System')),
+       ((SELECT person_id FROM person WHERE name = 'Miyuki Sawashiro'),
+        (SELECT show_id FROM show WHERE title = 'Book of Circus')),
+       ((SELECT person_id FROM person WHERE name = 'Miyuki Sawashiro'),
+        (SELECT show_id FROM show WHERE title = 'Kuroshitsuji')),
+       ((SELECT person_id FROM person WHERE name = 'Toshiyuki Morikawa'),
+        (SELECT show_id FROM show WHERE title = 'Book of Circus')),
+       ((SELECT person_id FROM person WHERE name = 'Toshiyuki Morikawa'),
+        (SELECT show_id FROM show WHERE title = 'Kuroshitsuji'))

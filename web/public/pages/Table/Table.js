@@ -21,6 +21,10 @@ export function tablePage(type, data) {
     const tableNode = document.createElement('table');
 
     if (data) {
+        data.forEach(elem => {
+            elem.release = new Date(elem.release).toDateString();
+            elem.birthdate = new Date(elem.birthdate).toDateString();
+        })
         const table = new TableComponent({
             tmplName: type.tmplName,
             parent: tableNode,

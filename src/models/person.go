@@ -12,5 +12,5 @@ type Person struct {
 
 type ExtPerson struct {
 	Person
-	Shows  []Show  `json:"show" db:"shows"`
+	Shows []Show `json:"show" db:"shows"`
 }
